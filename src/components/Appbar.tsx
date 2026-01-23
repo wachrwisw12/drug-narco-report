@@ -15,7 +15,7 @@ import logo from '../assets/images/logo.png';
 
 /* ===== MENU CONFIG ===== */
 const pages = [
-  { label: 'แจ้งเบาะแส1', path: '/report' },
+  { label: 'แจ้งเบาะแส', path: '/report' },
   { label: 'ติดตามเรื่องที่แจ้ง', path: '/track' },
 ];
 
