@@ -1,6 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
 import {
- 
   Button,
   Container,
   Paper,
@@ -8,12 +7,12 @@ import {
   Typography,
   Divider,
   Chip,
-} from '@mui/material';
+} from "@mui/material";
 
-type ReportStatus = 'รับเรื่องแล้ว' | 'กำลังดำเนินการ' | 'เสร็จสิ้น';
+type ReportStatus = "รับเรื่องแล้ว" | "กำลังดำเนินการ" | "เสร็จสิ้น";
 
 export default function TrackReportPage() {
-  const [trackingCode, setTrackingCode] = React.useState('');
+  const [trackingCode, setTrackingCode] = React.useState("");
   const [result, setResult] = React.useState<null | {
     title: string;
     detail: string;
@@ -27,18 +26,18 @@ export default function TrackReportPage() {
 
     // 🔌 mock data (ภายหลังเปลี่ยนเป็นเรียก API)
     setResult({
-      title: 'แจ้งไฟถนนดับ',
-      detail: 'ไฟถนนบริเวณหน้าวัดไม่สว่างในเวลากลางคืน',
-      status: 'กำลังดำเนินการ',
-      createdAt: '10 ม.ค. 2569',
-      updatedAt: '12 ม.ค. 2569',
+      title: "แจ้งไฟถนนดับ",
+      detail: "ไฟถนนบริเวณหน้าวัดไม่สว่างในเวลากลางคืน",
+      status: "กำลังดำเนินการ",
+      createdAt: "10 ม.ค. 2569",
+      updatedAt: "12 ม.ค. 2569",
     });
   };
 
   const statusColor = {
-    'รับเรื่องแล้ว': 'info',
-    'กำลังดำเนินการ': 'warning',
-    'เสร็จสิ้น': 'success',
+    รับเรื่องแล้ว: "info",
+    กำลังดำเนินการ: "warning",
+    เสร็จสิ้น: "success",
   } as const;
 
   return (
@@ -82,9 +81,7 @@ export default function TrackReportPage() {
               sx={{ mb: 2 }}
             />
 
-            <Typography fontWeight={600}>
-              หัวข้อ: {result.title}
-            </Typography>
+            <Typography fontWeight={600}>หัวข้อ: {result.title}</Typography>
 
             <Typography color="text.secondary" mb={2}>
               {result.detail}
