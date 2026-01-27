@@ -5,4 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
    base: '/drugnaco/',
+   build: {
+    // บังคับให้ output ไปอยู่นอก project
+    outDir: '../drugnaco',
+    emptyOutDir: true
+  }
 })
