@@ -18,6 +18,8 @@ const router = createBrowserRouter([
   //     path: '/login',
   //     element: <Login />,
   //   },
-]);
+], {
+    basename: "/drugnaco",
+  });
 
 export default router;

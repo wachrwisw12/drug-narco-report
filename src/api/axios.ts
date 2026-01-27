@@ -1,13 +1,11 @@
-// src/lib/axios.ts
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
-  // baseURL: "",
+  baseURL: import.meta.env.VITE_API_BASE || "/drugnaco/api",
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token"); // หรือ secure storage
+  const token = localStorage.getItem("access_token");
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
