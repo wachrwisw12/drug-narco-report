@@ -24,7 +24,7 @@ type Props = {
 export default function ReportForm({
   title = "เล่าเหตุการณ์ / แจ้งเบาะแส",
   onSubmit,
-  loading = false,
+  loading,
   // progress = 0,
 }: Props) {
   const [detail, setDetail] = useState("");
@@ -159,8 +159,8 @@ export default function ReportForm({
               ))}
             </Box>
           )}
-
-          {/* {loading && (
+          {/* 
+          {loading && (
             <Box sx={{ mt: 2 }}>
               <LinearProgress variant="determinate" value={progress} />
             </Box>
@@ -171,9 +171,9 @@ export default function ReportForm({
               type="submit"
               variant="contained"
               fullWidth
-              // disabled={loading}
+              disabled={loading}
             >
-              ส่งข้อมูล
+              {loading ? "กำลังบันทึก" : "ส่ง"}
             </Button>
           </Box>
         </Box>

@@ -20,6 +20,9 @@ export async function createReport(
       }
     },
   });
-  console.log(res.data);
-  return { tracking_code: res.data.data.tracking_code };
+
+  return {
+    tracking_code: res.data.data.tracking_code,
+    success: res.data.success,
+  };
 }

@@ -22,7 +22,7 @@ export default function AppDialog({
   title,
   message,
   onClose,
-  confirmText = "ตกลง",
+  confirmText = "ปิด",
   maxWidth,
   fullWidth,
 }: Props) {
@@ -44,7 +44,7 @@ export default function AppDialog({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} variant="contained">
+        <Button onClick={onClose} variant="contained" color="warning">
           {confirmText}
         </Button>
       </DialogActions>
