@@ -14,7 +14,7 @@ export default defineConfig({
 
       manifest: {
         id: "/drugnarco/",
-        name: "drug-naco-app",
+        name: "แจ้งข้อมูลยาเสพติด",
         short_name: "drug-naco",
         description: "Drug Narco Reporting System",
 
@@ -35,6 +35,13 @@ export default defineConfig({
             sizes: "512x512",
             type: "image/png",
             purpose: "any",
+          },
+        ],
+        screenshots: [
+          {
+            src: "/drugnarco/screenshots/mobile.png",
+            sizes: "390x844",
+            type: "image/png",
           },
         ],
       },

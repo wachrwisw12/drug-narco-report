@@ -1,5 +1,8 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { deepOrange } from "@mui/material/colors";
+
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,18 +15,36 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
 import logo from "../assets/images/logo.png";
+import { Avatar } from "@mui/material";
+import { logout } from "../features/auth/authSlice";
+import { pages } from "../constants/menu";
+import { filterPagesByRole } from "../utils/role";
 
 /* ===== MENU CONFIG ===== */
-const pages = [
-  { label: "แจ้งเบาะแส", path: "/report" },
-  { label: "ติดตามเรื่องที่แจ้ง", path: "/track" },
-];
 
 export default function ResponsiveAppBar() {
+  const dispatch = useAppDispatch();
+
+  const { user, isAuthenticated } = useAppSelector((s) => s.auth);
+  console.log("role", user?.role_id);
+  const visiblePages = filterPagesByRole(pages, user?.role_id);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const openUserMenu = Boolean(anchorElUser);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -31,7 +52,16 @@ export default function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout());
 
+      // ✅ login สำเร็จ → ไป dashboard
+      navigate(from, { replace: true });
+    } catch {
+      // ❌ error ถูกจัดการใน slice แล้ว
+    }
+  };
   return (
     <AppBar position="static" color="secondary">
       <Container maxWidth="xl">
@@ -72,7 +102,7 @@ export default function ResponsiveAppBar() {
                 horizontal: "left",
               }}
             >
-              {pages.map((page) => (
+              {visiblePages.map((page) => (
                 <MenuItem
                   key={page.label}
                   component={Link}
@@ -86,9 +116,21 @@ export default function ResponsiveAppBar() {
               <Divider sx={{ my: 1 }} />
 
               <MenuItem onClick={handleCloseNavMenu}>
-                <Button fullWidth variant="contained" color="primary">
-                  เข้าสู่ระบบ
-                </Button>
+                {isAuthenticated ? (
+                  <>
+                    <Typography>dsfds{user?.fullname}</Typography>
+                  </>
+                ) : (
+                  <Button
+                    component={Link}
+                    to="/login"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                  >
+                    เข้าสู่ระบบ
+                  </Button>
+                )}
               </MenuItem>
             </Menu>
           </Box>
@@ -110,7 +152,7 @@ export default function ResponsiveAppBar() {
 
           {/* ===== DESKTOP MENU ===== */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {visiblePages.map((page) => (
               <Button
                 key={page.label}
                 component={Link}
@@ -122,13 +164,72 @@ export default function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-
           {/* ===== LOGIN (DESKTOP ONLY) ===== */}
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <Button variant="contained" color="primary">
-              เข้าสู่ระบบ
-            </Button>
-          </Box>
+          {!isAuthenticated ? (
+            <>
+              <Box display="flex" alignItems="center">
+                <Button
+                  component={Link}
+                  to="/login"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                >
+                  เข้าสู่ระบบ
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <Box display="flex" alignItems="center">
+              <IconButton onClick={handleOpenUserMenu}>
+                <Avatar
+                  sx={{ bgcolor: deepOrange[500], width: 36, height: 36 }}
+                  alt={user?.fullname ?? "User"}
+                >
+                  {user?.fullname?.charAt(0) ?? "M"}
+                </Avatar>
+              </IconButton>
+
+              <Typography fontWeight={500} sx={{ ml: 1 }}>
+                {user?.fullname || "ไม่ระบุชื่อ"}
+              </Typography>
+
+              <Menu
+                anchorEl={anchorElUser}
+                open={openUserMenu}
+                onClose={handleCloseUserMenu}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+              >
+                <MenuItem
+                  component={Link}
+                  to="/profile"
+                  onClick={handleCloseUserMenu}
+                >
+                  โปรไฟล์
+                </MenuItem>
+
+                <MenuItem
+                  component={Link}
+                  to="/settings"
+                  onClick={handleCloseUserMenu}
+                >
+                  ตั้งค่า
+                </MenuItem>
+
+                <Divider />
+
+                <MenuItem
+                  onClick={() => {
+                    console.log("logout");
+                    handleLogout();
+                  }}
+                >
+                  ออกจากระบบ
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
