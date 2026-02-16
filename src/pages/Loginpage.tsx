@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { loginThunk } from "../features/auth/authSlice";
 import {
@@ -14,14 +14,11 @@ import {
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const { loading, error } = useAppSelector((s) => s.auth);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +27,7 @@ export default function LoginPage() {
       await dispatch(loginThunk({ username, password })).unwrap();
 
       // ✅ login สำเร็จ → ไป dashboard
-      navigate(from, { replace: true });
+      navigate("dashboard", { replace: true });
     } catch {
       // ❌ error ถูกจัดการใน slice แล้ว
     }

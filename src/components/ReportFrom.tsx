@@ -6,6 +6,7 @@ import {
   Typography,
   Paper,
   Container,
+  Stack,
 
   //LinearProgress,
 } from "@mui/material";
@@ -13,6 +14,8 @@ import type { ReportPayload } from "../types/report";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import AreaSelectButton from "./autocompletes/AreaSelectButton";
+import type { Area } from "../types/village";
 
 type Props = {
   title?: string;
@@ -28,10 +31,12 @@ export default function ReportForm({
   // progress = 0,
 }: Props) {
   const [detail, setDetail] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
+  // const [name, setName] = useState("");
+  // const [phone, setPhone] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [village, setVillage] = useState("");
+  const [area, setArea] = useState<Area | null>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -58,11 +63,16 @@ export default function ReportForm({
     e.preventDefault();
 
     if (loading) return; // 🔒 กันซ้ำ
-
+    if (!area) {
+      alert("กรุณาเลือกพื้นที่");
+      return;
+    }
     onSubmit({
+      village,
+      sub_districts_id: area.id,
       detail,
-      name,
-      phone,
+      // name,
+      // phone,
       images,
     });
   };
@@ -73,28 +83,39 @@ export default function ReportForm({
         <Typography variant="h5" fontWeight={600} gutterBottom>
           {title}
         </Typography>
-
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
           กรุณาเล่าเหตุการณ์ที่พบเห็น เช่น ใคร ทำอะไร ที่ไหน เมื่อไหร่
           สามารถแนบรูปเพื่อประกอบข้อมูลได้
         </Typography>
-
+        {/* {area?.id} {village} */}
         <Box component="form" onSubmit={handleSubmit}>
-          <TextField
+          <Stack spacing={2}>
+            <AreaSelectButton value={area} onChange={(data) => setArea(data)} />
+
+            <TextField
+              fullWidth
+              label="หมู่บ้าน / ชุมชน"
+              placeholder="เช่น บ้านโนนสว่าง หมู่ 5"
+              value={village}
+              onChange={(e) => setVillage(e.target.value)}
+              inputProps={{ maxLength: 100 }}
+            />
+          </Stack>
+          {/* <TextField
             fullWidth
             label="ชื่อผู้แจ้ง (ไม่บังคับ)"
             value={name}
             onChange={(e) => setName(e.target.value)}
             margin="normal"
-          />
+          /> */}
 
-          <TextField
+          {/* <TextField
             fullWidth
             label="เบอร์ติดต่อ (ไม่บังคับ)"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             margin="normal"
-          />
+          /> */}
 
           <TextField
             fullWidth

@@ -26,7 +26,7 @@ export default function ResponsiveAppBar() {
   const dispatch = useAppDispatch();
 
   const { user, isAuthenticated } = useAppSelector((s) => s.auth);
-  console.log("role", user?.role_id);
+
   const visiblePages = filterPagesByRole(pages, user?.role_id);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
@@ -74,9 +74,7 @@ export default function ResponsiveAppBar() {
               mr: 3,
             }}
           >
-            <Link to="/">
-              <img src={logo} alt="Logo" style={{ height: 100 }} />
-            </Link>
+            <img src={logo} alt="Logo" style={{ height: 100 }} />
           </Box>
 
           {/* ===== MOBILE MENU ===== */}

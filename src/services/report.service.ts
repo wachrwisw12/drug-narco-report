@@ -1,15 +1,34 @@
 import api from "../api/axios";
-import type { ReportPayload } from "../types/report";
+import type { ReportPayload, StatusRequest } from "../types/report";
+export async function updateStatusReport(
+  data: StatusRequest,
+): Promise<{ success: boolean; message: string }> {
+  const res = await api.post("/v1/update-status", data);
 
-// report.service.ts
+  return {
+    success: res.data.success,
+    message: res.data.message,
+  };
+}
 export async function createReport(
   data: ReportPayload,
   onProgress?: (p: number) => void,
 ) {
   const formData = new FormData();
+
+  // text fields
   formData.append("details", data.detail);
 
-  data.images?.forEach((img: string | Blob) => {
+  if (data.sub_districts_id) {
+    formData.append("sub_district_id", String(data.sub_districts_id));
+  }
+
+  if (data.village) {
+    formData.append("village", data.village);
+  }
+
+  // images
+  data.images?.forEach((img) => {
     formData.append("images", img);
   });
 

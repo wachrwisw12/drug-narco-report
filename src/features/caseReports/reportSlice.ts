@@ -1,26 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
+import type { CaseReport } from "../../types/report";
 
 /* ================= TYPES ================= */
 
-export type Report = {
-  id: number;
-  tracking_code: string;
-  details: string;
-  status: number;
-  created_at: string;
-  updated_at: string;
-};
-
 type ReportState = {
-  list: Report[];
+  count: number;
+  list: CaseReport[];
   loading: boolean;
   error: string | null;
+};
+
+type FetchReportsResponse = {
+  list: CaseReport[];
+  count: number;
 };
 
 /* ================= INITIAL ================= */
 
 const initialState: ReportState = {
+  count: 0,
   list: [],
   loading: false,
   error: null,
@@ -29,13 +28,17 @@ const initialState: ReportState = {
 /* ================= THUNK ================= */
 
 export const fetchReportsThunk = createAsyncThunk<
-  Report[],
+  FetchReportsResponse,
   void,
   { rejectValue: string }
 >("reports/fetch", async (_, { rejectWithValue }) => {
   try {
-    const res = await api.get("/v1/reports");
-    return res.data.data as Report[];
+    const res = await api.get("/v1/case-reports");
+
+    return {
+      list: res.data.data,
+      count: res.data.count,
+    };
   } catch {
     return rejectWithValue("โหลดรายการไม่สำเร็จ");
   }
@@ -54,7 +57,8 @@ const reportSlice = createSlice({
       })
       .addCase(fetchReportsThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.list = action.payload;
+        state.list = action.payload.list;
+        state.count = action.payload.count;
       })
       .addCase(fetchReportsThunk.rejected, (state, action) => {
         state.loading = false;
