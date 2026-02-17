@@ -13,7 +13,7 @@ export default function AreaSelectButton({ value, onChange }: Props) {
 
   return (
     <>
-      <Button variant="contained" onClick={() => setOpen(true)}>
+      <Button variant="outlined" onClick={() => setOpen(true)}>
         {value ? "เปลี่ยนพื้นที่" : "เลือกพื้นที่"}
       </Button>
 

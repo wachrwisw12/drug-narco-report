@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/axios";
+import type { User } from "../../types/user";
 
 /* ================== TYPES ================== */
-
-export type User = {
-  id: number;
-  username: string;
-  role_id: number;
-  fullname: string;
+const guestUser: User = {
+  id: 0,
+  username: "guest",
+  fullname: "Guest",
+  role_id: 0, // role = guest
 };
 
 type AuthState = {
@@ -23,7 +23,7 @@ const tokenFromStorage = localStorage.getItem("access_token");
 
 const initialState: AuthState = {
   isAuthenticated: !!tokenFromStorage,
-  user: null,
+  user: guestUser,
   token: tokenFromStorage,
   loading: false,
   error: null,
@@ -67,7 +67,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.user = null;
+      state.user = guestUser;
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;

@@ -25,7 +25,7 @@ type Props = {
 };
 
 export default function ReportForm({
-  title = "เล่าเหตุการณ์ / แจ้งเบาะแส",
+  title = "คำชี้แจง",
   onSubmit,
   loading,
   // progress = 0,
@@ -84,14 +84,21 @@ export default function ReportForm({
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          กรุณาเล่าเหตุการณ์ที่พบเห็น เช่น ใคร ทำอะไร ที่ไหน เมื่อไหร่
-          สามารถแนบรูปเพื่อประกอบข้อมูลได้
+          หากท่านพบเห็นการกระทำที่เกี่ยวข้องกับยาเสพติด เช่น การจำหน่าย
+          การครอบครอง การลักลอบขนส่ง การเสพ
+          หรือพฤติการณ์ที่น่าสงสัยว่าเกี่ยวข้องกับยาเสพติด
+          ซึ่งอาจก่อให้เกิดผลกระทบต่อความปลอดภัยในชีวิตและทรัพย์สินของประชาชน
+          ตลอดจนความสงบเรียบร้อยของสังคม
+          ท่านสามารถแจ้งเบาะแสหรือร้องเรียนผ่านช่องทางนี้ได้
+          การแจ้งข้อมูลของท่านจะถูกเก็บรักษาเป็นความลับ <br></br>ทั้งนี้
+          ขอความกรุณาระบุรายละเอียดให้ครบถ้วน เช่น สถานที่ วันเวลา บุคคล
+          หรือพฤติการณ์ที่พบเห็น
+          เพื่อให้การตรวจสอบเป็นไปอย่างรวดเร็วและมีประสิทธิภาพ
+          หน่วยงานขอขอบคุณท่านที่มีส่วนร่วมในการเฝ้าระวังและสร้างสังคมที่ปลอดภัยจากยาเสพติดร่วมกัน
         </Typography>
         {/* {area?.id} {village} */}
         <Box component="form" onSubmit={handleSubmit}>
           <Stack spacing={2}>
-            <AreaSelectButton value={area} onChange={(data) => setArea(data)} />
-
             <TextField
               fullWidth
               label="หมู่บ้าน / ชุมชน"
@@ -100,8 +107,9 @@ export default function ReportForm({
               onChange={(e) => setVillage(e.target.value)}
               inputProps={{ maxLength: 100 }}
             />
-          </Stack>
-          {/* <TextField
+            <AreaSelectButton value={area} onChange={(data) => setArea(data)} />
+
+            {/* <TextField
             fullWidth
             label="ชื่อผู้แจ้ง (ไม่บังคับ)"
             value={name}
@@ -109,7 +117,7 @@ export default function ReportForm({
             margin="normal"
           /> */}
 
-          {/* <TextField
+            {/* <TextField
             fullWidth
             label="เบอร์ติดต่อ (ไม่บังคับ)"
             value={phone}
@@ -117,86 +125,87 @@ export default function ReportForm({
             margin="normal"
           /> */}
 
-          <TextField
-            fullWidth
-            label="รายละเอียดเหตุการณ์"
-            placeholder="เช่น พบเห็นการลักลอบจำหน่ายยาเสพติดบริเวณ..."
-            value={detail}
-            onChange={(e) => setDetail(e.target.value)}
-            multiline
-            rows={6}
-            required
-            margin="normal"
-          />
+            <TextField
+              fullWidth
+              label="รายละเอียดเหตุการณ์"
+              placeholder="เช่น พบเห็นการลักลอบจำหน่ายยาเสพติดบริเวณ..."
+              value={detail}
+              onChange={(e) => setDetail(e.target.value)}
+              multiline
+              rows={6}
+              required
+              margin="normal"
+            />
 
-          {/* แนบรูป */}
-          <Box sx={{ mt: 2 }}>
-            <Button variant="outlined" component="label">
-              แนบรูปภาพ
-              <input
-                type="file"
-                hidden
-                multiple
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </Button>
-          </Box>
-
-          {/* preview */}
-          {previews.length > 0 && (
-            <Box sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
-              {previews.map((src, i) => (
-                <Box key={i} sx={{ position: "relative" }}>
-                  <Box
-                    component="img"
-                    src={src}
-                    sx={{
-                      width: 120,
-                      height: 120,
-                      objectFit: "cover",
-                      borderRadius: 1,
-                      border: "1px solid #ddd",
-                    }}
-                  />
-
-                  <IconButton
-                    size="small"
-                    onClick={() => handleRemoveImage(i)}
-                    sx={{
-                      position: "absolute",
-                      top: 4,
-                      right: 4,
-                      backgroundColor: "rgba(0,0,0,0.6)",
-                      color: "#fff",
-                      "&:hover": {
-                        backgroundColor: "rgba(0,0,0,0.8)",
-                      },
-                    }}
-                  >
-                    <CloseIcon fontSize="small" />
-                  </IconButton>
-                </Box>
-              ))}
+            {/* แนบรูป */}
+            <Box sx={{ mt: 2 }}>
+              <Button variant="outlined" component="label">
+                แนบรูปภาพ
+                <input
+                  type="file"
+                  hidden
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </Button>
             </Box>
-          )}
-          {/* 
+
+            {/* preview */}
+            {previews.length > 0 && (
+              <Box sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
+                {previews.map((src, i) => (
+                  <Box key={i} sx={{ position: "relative" }}>
+                    <Box
+                      component="img"
+                      src={src}
+                      sx={{
+                        width: 120,
+                        height: 120,
+                        objectFit: "cover",
+                        borderRadius: 1,
+                        border: "1px solid #ddd",
+                      }}
+                    />
+
+                    <IconButton
+                      size="small"
+                      onClick={() => handleRemoveImage(i)}
+                      sx={{
+                        position: "absolute",
+                        top: 4,
+                        right: 4,
+                        backgroundColor: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        "&:hover": {
+                          backgroundColor: "rgba(0,0,0,0.8)",
+                        },
+                      }}
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </Box>
+                ))}
+              </Box>
+            )}
+            {/* 
           {loading && (
             <Box sx={{ mt: 2 }}>
               <LinearProgress variant="determinate" value={progress} />
             </Box>
           )} */}
 
-          <Box sx={{ mt: 3 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              disabled={loading}
-            >
-              {loading ? "กำลังบันทึก" : "ส่ง"}
-            </Button>
-          </Box>
+            <Box sx={{ mt: 3 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={loading}
+              >
+                {loading ? "กำลังบันทึก" : "ส่งข้อมูล"}
+              </Button>
+            </Box>
+          </Stack>
         </Box>
       </Paper>
     </Container>

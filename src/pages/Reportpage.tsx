@@ -4,6 +4,7 @@ import { createReport } from "../services/report.service";
 import type { ReportPayload } from "../types/report";
 import { toast } from "react-toastify";
 import AppDialog from "../components/AppDialog";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
@@ -49,14 +50,23 @@ export default function ReportPage() {
 
       <AppDialog
         open={successOpen}
-        title="รหัสติดตามเรื่อง"
+        title="ส่งข้อมูลสำเร็จ"
         message={
-          <Stack spacing={2}>
-            <Typography>กรุณาเก็บรหัสนี้ไว้เพื่อติดตาม</Typography>
+          <Stack spacing={2} alignItems="center">
+            {/* success icon */}
+            <CheckCircleIcon sx={{ fontSize: 60, color: "success.main" }} />
+
+            <Typography textAlign="center">
+              ถ้าท่านต้องการติดตามสถานะเรื่องที่ท่านแจ้ง
+              กรุณาเก็บรหัสนี้ไว้เพื่อติดตาม ในเมนู ติดตามเรื่องที่แจ้ง
+            </Typography>
 
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography>รหัส</Typography>
-              <Typography fontWeight={600}>{trackingCode}</Typography>
+
+              <Typography fontWeight={600} color="error">
+                {trackingCode}
+              </Typography>
 
               <Tooltip title="คัดลอก">
                 <IconButton

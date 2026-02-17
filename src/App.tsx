@@ -3,7 +3,6 @@ import { RouterProvider } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { verifyTokenThunk } from "./features/auth/authSlice";
 import router from "./routes/router";
-import SplashScreen from "./components/SplashScreen";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -16,11 +15,6 @@ function App() {
       dispatch(verifyTokenThunk());
     }
   }, [token, dispatch]);
-
-  // กันหน้ากระพริบ
-  if (loading) {
-    return <SplashScreen />;
-  }
 
   return <RouterProvider router={router} />;
 }

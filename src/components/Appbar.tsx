@@ -11,14 +11,16 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-import logo from "../assets/images/logo.png";
+// import logo from "../assets/images/logo.png";
 import { Avatar } from "@mui/material";
 import { logout } from "../features/auth/authSlice";
-import { pages } from "../constants/menu";
+import { pages } from "../constants/menu.config";
 import { filterPagesByRole } from "../utils/role";
+import MuiLink from "@mui/material/Link";
+import { Link as RouterLink } from "react-router-dom";
+import ManageAccounts from "@mui/icons-material/ManageAccounts";
 
 /* ===== MENU CONFIG ===== */
 
@@ -63,7 +65,7 @@ export default function ResponsiveAppBar() {
     }
   };
   return (
-    <AppBar position="static" color="secondary">
+    <AppBar position="static" color="primary">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* ===== LOGO (DESKTOP) ===== */}
@@ -74,7 +76,8 @@ export default function ResponsiveAppBar() {
               mr: 3,
             }}
           >
-            <img src={logo} alt="Logo" style={{ height: 100 }} />
+            <Typography>ระบบแจ้งเบาะแสยาเสพติด </Typography>
+            {/* <img src={logo} alt="Logo" style={{ height: 100 }} /> */}
           </Box>
 
           {/* ===== MOBILE MENU ===== */}
@@ -84,6 +87,7 @@ export default function ResponsiveAppBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
+              <Typography>เมนู</Typography>
               <MenuIcon />
             </IconButton>
 
@@ -107,13 +111,19 @@ export default function ResponsiveAppBar() {
                   to={page.path}
                   onClick={handleCloseNavMenu}
                 >
-                  <Typography>{page.label}</Typography>
+                  <Typography>
+                    {" "}
+                    {page.icon && (
+                      <page.icon fontSize="small" style={{ marginRight: 8 }} />
+                    )}
+                    {page.label}
+                  </Typography>
                 </MenuItem>
               ))}
 
               <Divider sx={{ my: 1 }} />
 
-              <MenuItem onClick={handleCloseNavMenu}>
+              {/* <MenuItem onClick={handleCloseNavMenu}>
                 {isAuthenticated ? (
                   <>
                     <Typography>dsfds{user?.fullname}</Typography>
@@ -129,7 +139,7 @@ export default function ResponsiveAppBar() {
                     เข้าสู่ระบบ
                   </Button>
                 )}
-              </MenuItem>
+              </MenuItem> */}
             </Menu>
           </Box>
 
@@ -143,38 +153,66 @@ export default function ResponsiveAppBar() {
               fontWeight: 700,
             }}
           >
-            <Link to="/">
+            {/* <Link to="/">
               <img src={logo} alt="Logo" style={{ height: 100 }} />
-            </Link>
+            </Link> */}
           </Typography>
 
           {/* ===== DESKTOP MENU ===== */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {visiblePages.map((page) => (
-              <Button
-                key={page.label}
-                component={Link}
+              <MuiLink
+                key={page.path}
+                component={RouterLink}
                 to={page.path}
-                color="inherit"
-                sx={{ mx: 1 }}
+                underline="none"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  px: 2,
+                  py: 1,
+                  borderRadius: 2,
+                  color: "rgba(255,255,255,0.85)",
+                  fontWeight: 500,
+                  transition: ".15s",
+
+                  "&:hover": {
+                    color: "#F08207",
+                    background: "rgba(255,255,255,0.08)",
+                    fontWeight: 700,
+                  },
+                }}
               >
+                {page.icon && <page.icon fontSize="small" />}
                 {page.label}
-              </Button>
+              </MuiLink>
             ))}
           </Box>
           {/* ===== LOGIN (DESKTOP ONLY) ===== */}
           {!isAuthenticated ? (
             <>
               <Box display="flex" alignItems="center">
-                <Button
-                  component={Link}
+                <MuiLink
+                  component={RouterLink}
                   to="/login"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
+                  underline="none"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    color: "#fff",
+                    fontWeight: 600,
+                    transition: ".15s",
+
+                    "&:hover": {
+                      color: "#F08207",
+                    },
+                  }}
                 >
-                  เข้าสู่ระบบ
-                </Button>
+                  <ManageAccounts fontSize="small" />
+                  สำหรับเจ้าหน้าที่
+                </MuiLink>
               </Box>
             </>
           ) : (

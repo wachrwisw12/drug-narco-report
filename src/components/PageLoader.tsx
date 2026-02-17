@@ -1,16 +1,19 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+// components/CenterLoader.tsx
+import { Backdrop, CircularProgress, Box, Typography } from "@mui/material";
 
-export default function PageOverlayLoader({ open }: { open: boolean }) {
+export default function CenterLoader({ open }: { open: boolean }) {
   return (
     <Backdrop
       open={open}
       sx={{
         zIndex: 9999,
-        backgroundColor: "rgba(255,255,255,0.4)", // ทำให้จาง
-        backdropFilter: "blur(2px)", // เบลอ
+        backgroundColor: "rgba(0,0,0,0.15)",
       }}
     >
-      <CircularProgress />
+      <Box textAlign="center">
+        <CircularProgress size={55} thickness={4} />
+        <Typography mt={2}>กำลังโหลด...</Typography>
+      </Box>
     </Backdrop>
   );
 }
