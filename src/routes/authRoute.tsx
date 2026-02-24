@@ -2,12 +2,12 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 
 export default function AuthRoute() {
-  const { isAuthenticated, loading } = useAppSelector((s) => s.auth);
+  const { status, loading } = useAppSelector((s) => s.auth);
 
   if (loading) return null;
 
   // ❌ ยังไม่ login
-  if (!isAuthenticated) {
+  if (status !== "authenticated") {
     return <Outlet />;
   } else {
     return <Navigate to="/" replace />;

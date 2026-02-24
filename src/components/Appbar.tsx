@@ -13,7 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
-// import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo.png";
 import { Avatar } from "@mui/material";
 import { logout } from "../features/auth/authSlice";
 import { pages } from "../constants/menu.config";
@@ -27,7 +27,7 @@ import ManageAccounts from "@mui/icons-material/ManageAccounts";
 export default function ResponsiveAppBar() {
   const dispatch = useAppDispatch();
 
-  const { user, isAuthenticated } = useAppSelector((s) => s.auth);
+  const { user, status, loading } = useAppSelector((s) => s.auth);
 
   const visiblePages = filterPagesByRole(pages, user?.role_id);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -76,8 +76,12 @@ export default function ResponsiveAppBar() {
               mr: 3,
             }}
           >
-            <Typography>ระบบแจ้งเบาะแสยาเสพติด </Typography>
-            {/* <img src={logo} alt="Logo" style={{ height: 100 }} /> */}
+            {
+              <>
+                <img src={logo} alt="Logo" style={{ height: 30 }} />
+              </>
+            }
+            <Typography sx={{ ml: 1 }}>ระบบแจ้งเบาะแสยาเสพติด </Typography>
           </Box>
 
           {/* ===== MOBILE MENU ===== */}
@@ -160,37 +164,40 @@ export default function ResponsiveAppBar() {
 
           {/* ===== DESKTOP MENU ===== */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {visiblePages.map((page) => (
-              <MuiLink
-                key={page.path}
-                component={RouterLink}
-                to={page.path}
-                underline="none"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  px: 2,
-                  py: 1,
-                  borderRadius: 2,
-                  color: "rgba(255,255,255,0.85)",
-                  fontWeight: 500,
-                  transition: ".15s",
+            {loading ? (
+              <Typography>กำลังโหลด...</Typography>
+            ) : (
+              visiblePages.map((page) => (
+                <MuiLink
+                  key={page.path}
+                  component={RouterLink}
+                  to={page.path}
+                  underline="none"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 2,
+                    color: "primary.contrastText",
+                    fontWeight: 500,
+                    transition: ".15s",
 
-                  "&:hover": {
-                    color: "#F08207",
-                    background: "rgba(255,255,255,0.08)",
-                    fontWeight: 700,
-                  },
-                }}
-              >
-                {page.icon && <page.icon fontSize="small" />}
-                {page.label}
-              </MuiLink>
-            ))}
+                    "&:hover": {
+                      background: "rgba(255,255,255,0.08)",
+                      fontWeight: 700,
+                    },
+                  }}
+                >
+                  {page.icon && <page.icon fontSize="small" />}
+                  {page.label}
+                </MuiLink>
+              ))
+            )}
           </Box>
           {/* ===== LOGIN (DESKTOP ONLY) ===== */}
-          {!isAuthenticated ? (
+          {status !== "authenticated" ? (
             <>
               <Box display="flex" alignItems="center">
                 <MuiLink
@@ -201,12 +208,16 @@ export default function ResponsiveAppBar() {
                     display: "flex",
                     alignItems: "center",
                     gap: 1,
-                    color: "#fff",
-                    fontWeight: 600,
+                    px: 2,
+                    py: 1,
+                    borderRadius: 2,
+                    color: "primary.contrastText",
+                    fontWeight: 500,
                     transition: ".15s",
 
                     "&:hover": {
-                      color: "#F08207",
+                      background: "rgba(255,255,255,0.08)",
+                      fontWeight: 700,
                     },
                   }}
                 >

@@ -5,6 +5,7 @@ import TrackCodeCell from "./cells/TrackCodeCell";
 import CreatedATCell from "./cells/CreatedAtCell";
 import StatusCell from "./cells/StatusCell";
 import VillageCell from "./cells/VillageCell";
+import ImagesReportCell from "./cells/ImagesReportCell";
 
 type Props = {
   row: CaseReport;
@@ -17,12 +18,9 @@ export default function CaseReportTableRow({ row }: Props) {
       <TrackCodeCell row={row} />
       <CaseInfoCell row={row} />
       <CreatedATCell row={row} />
-
-      <TableCell />
+      <ImagesReportCell row={row} />
       <VillageCell row={row} />
-
       {/* <StatusNameCell url={row.evidence_url} /> */}
-
       {/* <ActionCell row={row} /> */}
       <StatusCell row={row} />
     </TableRow>

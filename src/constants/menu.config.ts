@@ -9,8 +9,9 @@ import {
 /* ===== ROLE ===== */
 export const ROLE = {
   SUPER_ADMIN: 5,
-  DISTRICT_ADMIN: 2,
+  DISTRICT_ADMIN: 4,
   EXECUTIVE: 6,
+  GUEST: 1,
 } as const;
 
 /* ===== PAGE TYPE ===== */
@@ -23,24 +24,24 @@ export type Page = {
 
 /* ===== MENU CONFIG ===== */
 export const pages: Page[] = [
-  { label: "แดชบอร์ด", path: "dashboard", roles: [2, 5, 6], icon: Dashboard },
+  {
+    label: "แดชบอร์ด",
+    path: "dashboard",
+    roles: [ROLE.SUPER_ADMIN, ROLE.DISTRICT_ADMIN, ROLE.EXECUTIVE],
+    icon: Dashboard,
+  },
   {
     label: "แจ้งเบาะแส",
     path: "report",
-    roles: [0],
+    roles: [ROLE.GUEST],
     icon: Visibility,
   },
   {
     label: "ติดตามเรื่องที่แจ้ง",
     path: "track",
-    roles: [0],
+    roles: [ROLE.GUEST],
     icon: Campaign,
   },
-  // {
-  //   label: "จัดการระดับอำเภอ",
-  //   path: "district",
-  //   roles: [ROLE.DISTRICT_ADMIN],
-  // },
   {
     label: "เคสทั้งหมด",
     path: "reportsList",

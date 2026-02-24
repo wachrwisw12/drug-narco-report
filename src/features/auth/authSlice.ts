@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import api from "../../api/axios";
 import type { User } from "../../types/user";
 
@@ -7,14 +11,14 @@ const guestUser: User = {
   id: 0,
   username: "guest",
   fullname: "Guest",
-  role_id: 0, // role = guest
+  role_id: 1, // role = guest
 };
 
 type AuthState = {
-  isAuthenticated: boolean;
   user: User | null;
   token: string | null;
   loading: boolean;
+  status: "checking" | "authenticated" | "unauthenticated";
   error: string | null;
 };
 
@@ -22,10 +26,10 @@ type AuthState = {
 const tokenFromStorage = localStorage.getItem("access_token");
 
 const initialState: AuthState = {
-  isAuthenticated: !!tokenFromStorage,
   user: guestUser,
   token: tokenFromStorage,
   loading: false,
+  status: "checking",
   error: null,
 };
 
@@ -53,6 +57,10 @@ export const verifyTokenThunk = createAsyncThunk<
   void,
   { rejectValue: null }
 >("auth/verify", async (_, { rejectWithValue }) => {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    return rejectWithValue(null);
+  }
   try {
     const res = await api.get("/auth/me");
     return res.data.user; // backend ควรคืน user
@@ -67,11 +75,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
+      state.status = "unauthenticated";
       state.user = guestUser;
       state.token = null;
-      state.isAuthenticated = false;
       state.error = null;
       localStorage.removeItem("access_token");
+    },
+    setStatus(state, action: PayloadAction<AuthState["status"]>) {
+      state.status = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -79,37 +90,35 @@ const authSlice = createSlice({
       /* ===== LOGIN ===== */
       .addCase(loginThunk.pending, (state) => {
         state.loading = true;
+        state.status = "unauthenticated";
         state.error = null;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true;
+        state.status = "authenticated";
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem("access_token", action.payload.token);
       })
       .addCase(loginThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.status = "unauthenticated";
         state.error = action.payload ?? "login error";
         state.user = null;
         state.token = null;
-        state.isAuthenticated = false;
         localStorage.removeItem("access_token");
       })
 
       /* ===== VERIFY ===== */
       .addCase(verifyTokenThunk.pending, (state) => {
-        state.loading = true;
+        state.status = "checking";
       })
       .addCase(verifyTokenThunk.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = true;
+        state.status = "authenticated";
         state.user = action.payload;
       })
       .addCase(verifyTokenThunk.rejected, (state) => {
-        state.loading = false;
-        state.isAuthenticated = false;
-        state.user = null;
+        state.status = "unauthenticated";
+        state.user = guestUser;
         state.token = null;
         localStorage.removeItem("access_token");
       });

@@ -8,11 +8,11 @@ export default function ReportList() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchReportsThunk());
+    dispatch(fetchReportsThunk({ status: 0 }));
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Typography>รายการเคสแจ้งเบาะแส</Typography>
       <CaseReportTable />
     </Container>

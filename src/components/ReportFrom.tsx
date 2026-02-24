@@ -78,8 +78,17 @@ export default function ReportForm({
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Paper elevation={3} sx={{ p: 4 }}>
+    <Container maxWidth="md">
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#ffffff",
+        }}
+      >
+        {/* <Container maxWidth="md" sx={{ mt: 4 }}> */}
+        {/* <Paper elevation={3} sx={{ p: 4 }}> */}
         <Typography variant="h5" fontWeight={600} gutterBottom>
           {title}
         </Typography>
@@ -199,6 +208,7 @@ export default function ReportForm({
               <Button
                 type="submit"
                 variant="contained"
+                color="primary"
                 fullWidth
                 disabled={loading}
               >

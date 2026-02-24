@@ -3,8 +3,8 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#38706C",
-      contrastText: "#ffffff",
+      main: "#027368",
+      contrastText: "#F2F2F2",
     },
     secondary: {
       main: "#ffffff",
@@ -55,33 +55,33 @@ const theme = createTheme({
 
         text: {
           "&:hover": {
-            color: "#2494CC",
-            backgroundColor: "rgba(36, 148, 204, 0.08)",
+            backgroundColor: "rgba(213, 217, 219, 0.08)",
           },
         },
 
         containedPrimary: {
           "&:hover": {
-            backgroundColor: "#1f7fb0",
+            //  backgroundColor: "rgba(36, 148, 204, 0.08)",
           },
         },
       },
     },
 
-    // MuiLink: {
-    //   styleOverrides: {
-    //     root: {
-    //       color: "#2494CC",
-    //       textDecoration: "none",
-    //       fontWeight: 500,
-    //       cursor: "pointer",
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#29ce60",
+        },
+      },
+    },
 
-    //       "&:hover": {
-    //         textDecoration: "underline",
-    //         color: "#1f7fb0",
-    //       },
-    //     },
-    //   },
+    MuiTableCell: {
+      styleOverrides: {
+        head: {
+          fontWeight: 600,
+        },
+      },
+    },
   },
 });
 

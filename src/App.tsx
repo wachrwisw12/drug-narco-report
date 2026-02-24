@@ -1,22 +1,47 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { verifyTokenThunk } from "./features/auth/authSlice";
 import router from "./routes/router";
+import SplashScreen from "./components/SplashScreen";
+import GlobalLoader from "./components/GlobalLoader";
 
 function App() {
   const dispatch = useAppDispatch();
-  const token = localStorage.getItem("access_token");
-  const { loading } = useAppSelector((s) => s.auth);
+  const { status } = useAppSelector((state) => state.auth);
+  const [showSplash, setShowSplash] = useState(true);
+  const { globalLoading } = useAppSelector((s) => s.ui);
 
   useEffect(() => {
-    if (token) {
-      console.log(loading);
-      dispatch(verifyTokenThunk());
-    }
-  }, [token, dispatch]);
+    const init = async () => {
+      const start = Date.now();
 
-  return <RouterProvider router={router} />;
+      await dispatch(verifyTokenThunk());
+
+      const elapsed = Date.now() - start;
+      const minDuration = 800; // ปรับได้ 600-1000
+
+      const remaining = minDuration - elapsed;
+
+      if (remaining > 0) {
+        setTimeout(() => setShowSplash(false), remaining);
+      } else {
+        setShowSplash(false);
+      }
+    };
+
+    init();
+  }, [dispatch]);
+
+  if (status === "checking" || showSplash) {
+    return <SplashScreen />;
+  }
+
+  return (
+    <>
+      <RouterProvider router={router} />
+      <GlobalLoader show={globalLoading} />
+    </>
+  );
 }
-
 export default App;

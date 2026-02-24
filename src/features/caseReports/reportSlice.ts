@@ -7,6 +7,7 @@ import type { CaseReport } from "../../types/report";
 type ReportState = {
   count: number;
   list: CaseReport[];
+  selected: CaseReport | null;
   loading: boolean;
   error: string | null;
 };
@@ -21,6 +22,7 @@ type FetchReportsResponse = {
 const initialState: ReportState = {
   count: 0,
   list: [],
+  selected: null,
   loading: false,
   error: null,
 };
@@ -29,11 +31,15 @@ const initialState: ReportState = {
 
 export const fetchReportsThunk = createAsyncThunk<
   FetchReportsResponse,
-  void,
+  { status?: number },
   { rejectValue: string }
->("reports/fetch", async (_, { rejectWithValue }) => {
+>("reports/fetch", async (params, { rejectWithValue }) => {
   try {
-    const res = await api.get("/v1/case-reports");
+    const res = await api.get("/v1/case-reports", {
+      params: {
+        status: params?.status,
+      },
+    });
 
     return {
       list: res.data.data,
@@ -41,6 +47,19 @@ export const fetchReportsThunk = createAsyncThunk<
     };
   } catch {
     return rejectWithValue("โหลดรายการไม่สำเร็จ");
+  }
+});
+/* ================== LOGIN ================== */
+export const fetchReportByIdThunk = createAsyncThunk<
+  CaseReport,
+  string,
+  { rejectValue: string }
+>("reports/fetchById", async (id, { rejectWithValue }) => {
+  try {
+    const res = await api.get(`/v1/case-reports/${id}`);
+    return res.data.data;
+  } catch {
+    return rejectWithValue("โหลดข้อมูลไม่สำเร็จ");
   }
 });
 
@@ -61,6 +80,18 @@ const reportSlice = createSlice({
         state.count = action.payload.count;
       })
       .addCase(fetchReportsThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "error";
+      });
+    builder
+      .addCase(fetchReportByIdThunk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchReportByIdThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selected = action.payload; // 👈 เก็บ detail
+      })
+      .addCase(fetchReportByIdThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "error";
       });

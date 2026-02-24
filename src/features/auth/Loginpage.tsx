@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { loginThunk } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { loginThunk } from "./authSlice";
 import {
   Box,
   Card,
@@ -14,20 +14,16 @@ import {
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const { loading, error } = useAppSelector((s) => s.auth);
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       await dispatch(loginThunk({ username, password })).unwrap();
-
       // ✅ login สำเร็จ → ไป dashboard
-      navigate("dashboard", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch {
       // ❌ error ถูกจัดการใน slice แล้ว
     }

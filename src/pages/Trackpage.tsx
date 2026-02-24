@@ -13,7 +13,8 @@ import { trackingSearch } from "../services/tracking.service";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { formatDateTHBE, timeAgo } from "../utils/date";
-import statusColor from "../utils/status_colors";
+import { statusColor } from "../constants/status_colors";
+import type { StatusType } from "../constants/status.config";
 
 export default function TrackReportPage() {
   // const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -25,7 +26,7 @@ export default function TrackReportPage() {
   const [result, setResult] = React.useState<null | {
     title: string;
     details: string;
-    status: string;
+    status: StatusType;
     name_status: string;
     created_at: string;
     updated_at: string;
@@ -72,7 +73,14 @@ export default function TrackReportPage() {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Paper sx={{ p: 4 }}>
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          borderRadius: 3,
+          backgroundColor: "#ffffff",
+        }}
+      >
         <Typography variant="h5" fontWeight={600} gutterBottom>
           ติดตามสถานะเรื่องร้องเรียน
         </Typography>
@@ -132,7 +140,7 @@ export default function TrackReportPage() {
               sx={{ mb: 2 }}
             />
 
-            <Typography fontWeight={600}>หัวข้อ: {result.title}</Typography>
+            <Typography fontWeight={600}>รายละเอียด: {result.title}</Typography>
 
             <Typography color="text.secondary" mb={2}>
               {result.details}

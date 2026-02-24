@@ -3,12 +3,13 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import ReportPage from "../pages/Reportpage";
 import TrackReportPage from "../pages/Trackpage";
-import LoginPage from "../pages/Loginpage";
+import LoginPage from "../features/auth/Loginpage";
 import ProtectedRoute from "./protectedRoute";
 
 import Dashboard from "../features/dashboard/dashboard";
 import AuthRoute from "./authRoute";
 import ReportListPage from "../features/caseReports/reportPage";
+import ReportDetail from "../features/caseReports/reportDetail";
 
 const router = createBrowserRouter(
   [
@@ -23,7 +24,19 @@ const router = createBrowserRouter(
           element: <ProtectedRoute />,
           children: [
             { path: "dashboard", element: <Dashboard /> },
-            { path: "reportsList", element: <ReportListPage /> },
+            {
+              path: "reportsList",
+              children: [
+                {
+                  index: true,
+                  element: <ReportListPage />,
+                },
+                {
+                  path: ":id",
+                  element: <ReportDetail />,
+                },
+              ],
+            },
           ],
         },
       ],
