@@ -74,3 +74,4 @@ export default defineConfig([
 # drug-narco-report
 # drugnaco
 # tarawit-fontend
+# tarawit-fontend
