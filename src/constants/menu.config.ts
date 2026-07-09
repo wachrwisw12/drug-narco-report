@@ -25,7 +25,7 @@ export type Page = {
 /* ===== MENU CONFIG ===== */
 export const pages: Page[] = [
   {
-    label: "แดชบอร์ด",
+    label: "หนา้าหลัก",
     path: "dashboard",
     roles: [ROLE.SUPER_ADMIN, ROLE.DISTRICT_ADMIN, ROLE.EXECUTIVE],
     icon: Dashboard,

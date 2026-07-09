@@ -9,8 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
 
-      scope: "/drugnarco/",
-      base: "/drugnarco/",
+      scope: "/",
+      base: "/",
 
       manifest: {
         id: "/drugnarco/",
